@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">📦 Formulario de Solicitud</h4>
+                </div>
+
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    {{ field.label }}
+                                </label>
+
+                                {{ field }}
+
+                                {% if field.errors %}
+                                    <div class="text-danger small">
+                                        {{ field.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'solicitudes' %}" class="btn btn-outline-secondary">
+                                Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                💾 Guardar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ================= AUTOCOMPLETADO POR COD DUN ================= -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const codDun = document.querySelector("[name='cod_dun']");
+    const codEan = document.querySelector("[name='cod_ean']");
+    const codSistema = document.querySelector("[name='cod_sistema']");
+    const descripcion = document.querySelector("[name='descripcion']");
+
+    if (!codDun) {
+        console.error("❌ Campo cod_dun no encontrado");
+        return;
+    }
+
+    const urlBuscar = "{% url 'buscar_dun' %}";
+
+    codDun.addEventListener("blur", function () {
+        const valor = this.value.trim();
+        if (!valor) return;
+
+        fetch(`${urlBuscar}?cod_dun=${encodeURIComponent(valor)}`)
+            .then(response => {
+                if (!response.ok) throw new Error("No encontrado");
+                return response.json();
+            })
+            .then(data => {
+                codEan.value = data.cod_ean || "";
+                codSistema.value = data.cod_sistema || "";
+                descripcion.value = data.descripcion || "";
+            })
+            .catch(() => {
+                codEan.value = "";
+                codSistema.value = "";
+                descripcion.value = "";
+            });
+    });
+
+});
+</script>
+
+
+{% endblock %}
