@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def solicitudes(request):
-    database = Solicitud.objects.all()
+    database = Solicitud.objects.all().order_by('-fecha_solicitud')
     
     return render(
         request, 'index.html', context={'pedidos': database}
@@ -22,7 +22,7 @@ def pedido_crear(request):
     form = SolicitudForm(request.POST or None)
     if form.is_valid():
         form.save()
-        return redirect('solicitudes')   # 👈 CAMBIO
+        return redirect('solicitudes')   #  CAMBIO
     return render(request, 'form.html', {'form': form})
 
 def pedido_editar(request, id):
@@ -30,13 +30,13 @@ def pedido_editar(request, id):
     form = SolicitudForm(request.POST or None, instance=pedido)
     if form.is_valid():
         form.save()
-        return redirect('solicitudes')   # 👈 CAMBIO
+        return redirect('solicitudes')   #  CAMBIO
     return render(request, 'form.html', {'form': form})
 
 def pedido_eliminar(request, id):
     pedido = get_object_or_404(Solicitud, id=id)
     pedido.delete()
-    return redirect('solicitudes')       # 👈 CAMBIO
+    return redirect('solicitudes')       #  CAMBIO
 
 
 # autocompleatdo 

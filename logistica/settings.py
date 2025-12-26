@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'pedidos.apps.PedidosConfig',
+    'django.forms',
     'auditlog',
     
     
@@ -101,16 +102,7 @@ DATABASES = {
     )
 }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'data_base',
-#         'USER': 'postgres',
-#         'PASSWORD': '310420',
-#         'HOST': 'localhost',  # si está en la misma máquina
-#         'PORT': '5433',
-#     }
-# }
+
 
 
 # Password validation
