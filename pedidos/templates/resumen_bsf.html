@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3 class="mb-4">📊 Resumen </h3>
+
+<div class="row mb-3">
+    <div class="col-md-6">
+        <input type="text" id="filtroResumen" class="form-control"
+               placeholder="🔍 Buscar en el resumen...">
+    </div>
+
+    <div class="col-md-6 text-end">
+        <button class="btn btn-success" onclick="exportarResumenExcel()">
+            📤 Exportar Excel
+        </button>
+    </div>
+</div>
+
+<div class="table-responsive" style="max-height: 70vh; overflow-y: auto;">
+    <table id="tablaResumen" class="table table-bordered table-hover table-striped align-middle">
+        <thead class="table-dark text-center" style="position: sticky; top: 0;">
+            <tr>
+                <th>Cod DUN</th>
+                <th>Cod EAN</th>
+                <th>Cod Sistema</th>
+                <th>Descripción</th>
+                <th>Total Enviada BSF</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in resumen %}
+            <tr>
+                <td>{{ r.cod_dun }}</td>
+                <td>{{ r.cod_ean }}</td>
+                <td>{{ r.cod_sistema }}</td>
+                <td>{{ r.descripcion }}</td>
+                <td class="text-end fw-bold">{{ r.total_bsf }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center text-muted">
+                    No hay datos disponibles
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Librería Excel -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<!-- Filtro -->
+<script>
+document.getElementById("filtroResumen").addEventListener("keyup", function () {
+    let filtro = this.value.toLowerCase();
+    let filas = document.querySelectorAll("#tablaResumen tbody tr");
+
+    filas.forEach(fila => {
+        fila.style.display = fila.innerText.toLowerCase().includes(filtro)
+            ? ""
+            : "none";
+    });
+});
+</script>
+
+<!-- Exportar Excel -->
+<script>
+function exportarResumenExcel() {
+    let tabla = document.getElementById("tablaResumen");
+    let wb = XLSX.utils.table_to_book(tabla, { sheet: "Resumen BSF" });
+    XLSX.writeFile(wb, "resumen_bsf.xlsx");
+}
+</script>
+
+{% endblock %}

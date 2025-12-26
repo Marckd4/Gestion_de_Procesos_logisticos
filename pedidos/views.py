@@ -78,3 +78,27 @@ def crear_superusuario(request):
         return redirect('login')
 
     return render(request, 'crear_superusuario.html')
+
+
+# resumen dedicado a mi mama 
+from django.db.models import Sum
+from .models import Solicitud
+
+def resumen_bsf(request):
+    resumen = (
+        Solicitud.objects
+        .values(
+            'cod_dun',
+            'cod_ean',
+            'cod_sistema',
+            'descripcion'
+        )
+        .annotate(
+            total_bsf=Sum('cant_enviada_bsf')
+        )
+        .order_by('cod_dun')
+    )
+
+    return render(request, 'resumen_bsf.html', {
+        'resumen': resumen
+    })
