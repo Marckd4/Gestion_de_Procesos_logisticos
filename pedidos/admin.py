@@ -51,3 +51,7 @@ class SolicitudAdmin(admin.ModelAdmin):
     ver_historial.short_description = "Historial de Cambios"
 
 admin.site.register(Solicitud, SolicitudAdmin)
+
+
+# admin excel 
+

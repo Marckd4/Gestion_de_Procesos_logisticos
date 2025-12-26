@@ -36,6 +36,8 @@ if RENDER_EXTERNAL_HOSTNAME:
 
 # Application definition
 
+
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -46,6 +48,8 @@ INSTALLED_APPS = [
     'pedidos.apps.PedidosConfig',
     'django.forms',
     'auditlog',
+  
+   
     
     
 ]
@@ -86,21 +90,21 @@ WSGI_APPLICATION = 'logistica.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-
-
 DATABASES = {
-    'default': dj_database_url.config(
-        default='postgresql://postgres:postgres@localhost/postgres',
-        conn_max_age=600
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
+
+
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default='postgresql://postgres:postgres@localhost/postgres',
+#         conn_max_age=600
+#     )
+# }
 
 
 
@@ -160,3 +164,24 @@ LOGOUT_REDIRECT_URL = '/'
 
 # paso admin datas
 AUDITLOG_LOGENTRY_MODEL = 'auditlog.LogEntry'
+
+
+
+
+# ============================================
+# Configuraciones de Seguridad de Sesiones
+# ============================================
+
+# --- Seguridad de Cookies ---
+SESSION_COOKIE_SECURE = False  # Cámbialo a True si usas HTTPS
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = "Lax"
+
+# --- Control de Sesión ---
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Cierra al cerrar navegador
+SESSION_COOKIE_AGE = 3600  # 1 hora por si acaso
+
+# Evita que apps externas usen la cookie
+CSRF_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_HTTPONLY = True
+
